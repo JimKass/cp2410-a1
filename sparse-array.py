@@ -6,15 +6,16 @@ class SparseArray:
 
     class _Node:
         """A non_public used for storing elements in the SparseArray."""
-        def __init__(self, _e, _i, _next, _prev):
+        def __init__(self, _e, _i, _next):
             self._e = _e
             self._i = _i
-            self._next = next
-            self._prev = _prev
+            self._next = _next
 
     def __init__(self, n):
         self.m = 0
         self.n = n
+        self.tail = self._Node(None, None, None)
+        self.head = self._Node(None, None, self.tail)
 
     def get_usage(self):
         """Prints the amount of elements in the SparseArray."""
@@ -26,12 +27,15 @@ class SparseArray:
 
     def __getitem__(self, i):
         """Returns the value of the element at index i."""
-        pass
+        if i > self.n:
+            raise IndexError
 
     def __setitem__(self, j, e):
         """Sets the value of element at index j to e."""
-        pass
+        if j > self.n:
+            raise IndexError
 
     def fill(self, seq):
         """Add all of the elements from sequence seq into the SparseArray."""
-        pass
+        if self.n < self.m + len(seq):
+            raise ValueError
