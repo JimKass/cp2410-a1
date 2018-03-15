@@ -58,6 +58,7 @@ class SparseArray:
             self._make_node(e, j)
         else:
             node._e = e
+            # TODO: Need to be able to set an element to None correctly.
 
     def fill(self, seq):
         """Add all of the elements from sequence seq into the SparseArray."""
