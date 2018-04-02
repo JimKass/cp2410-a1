@@ -38,6 +38,7 @@ class SparseArray:
         new_node = self._Node(e, i, self.tail, self.tail._prev)
         self.tail._prev._next = new_node
         self.tail._prev = new_node
+        self.m += 1
 
     def __len__(self):
         """Prints the capacity of the SparseArray."""
@@ -47,20 +48,32 @@ class SparseArray:
         """Returns the value of the element at index i."""
         if i > self.n:
             raise IndexError
-        return self._get_node_at(i, self.head._next)
+        node = self._get_node_at(i, self.head._next)
+        if node is None:
+            return None
+        return node._e
 
     def __setitem__(self, j, e):
         """Sets the value of element at index j to e."""
         if j > self.n:
             raise IndexError
         node = self._get_node_at(j, self.head._next)
-        if node == None:
+        if e is None and node is not None:
+            node._next._prev, node._prev._next = node._prev, node._next
+        elif node is None:
             self._make_node(e, j)
         else:
             node._e = e
-            # TODO: Need to be able to set an element to None correctly.
 
     def fill(self, seq):
         """Add all of the elements from sequence seq into the SparseArray."""
         if self.n < self.m + len(seq):
             raise ValueError
+        indices = []
+        for i in range(self.n):
+            if i not in indices and self._get_node_at(i, self.head) is None:
+                indices.append(i)
+            if len(indices) >= len(seq):    # If the amount of indices we have is greater than or equal to the amount
+                break                       # that we need. Stop.
+        for e in seq:
+            self._make_node(e, indices.pop(0))
